@@ -8,25 +8,29 @@ import javax.persistence.Table;
 @Table
 public class Item {
     @Id
-    public int item_id;
-    public String name;
-    public int quantity_available;
-    public int cost_price;
-    public int mrp;
-    public int brand_id;
-    public int discount;
-    public int voucher_credit;
-    public String category;
-    public String imgurl;
+    int item_id;
+    String name;
+    int qt_avail;
+    int cost_price;
+    int mrp;
+    int brand_id;
+    int sold_qt;
+    int rating;
+    int discount;
+    int voucher_credit;
+    String category;
+    String imgurl;
 
 
-    public Item(int item_id, String name, int quantity_available, int cost_price, int mrp, int brand_id, int discount, int voucher_credit, String category, String imgurl) {
+    public Item(int item_id, String name, int qt_avail, int cost_price, int mrp, int brand_id, int sold_qt, int rating, int discount, int voucher_credit, String category, String imgurl) {
         this.item_id = item_id;
         this.name = name;
-        this.quantity_available = quantity_available;
+        this.qt_avail = qt_avail;
         this.cost_price = cost_price;
         this.mrp = mrp;
         this.brand_id = brand_id;
+        this.sold_qt = sold_qt;
+        this.rating = rating;
         this.discount = discount;
         this.voucher_credit = voucher_credit;
         this.category = category;
@@ -52,12 +56,12 @@ public class Item {
         this.name = name;
     }
 
-    public int getQuantity_available() {
-        return quantity_available;
+    public int getQt_avail() {
+        return qt_avail;
     }
 
-    public void setQuantity_available(int quantity_available) {
-        this.quantity_available = quantity_available;
+    public void setQt_avail(int qt_avail) {
+        this.qt_avail = qt_avail;
     }
 
     public int getCost_price() {
@@ -82,6 +86,22 @@ public class Item {
 
     public void setBrand_id(int brand_id) {
         this.brand_id = brand_id;
+    }
+
+    public int getSold_qt() {
+        return sold_qt;
+    }
+
+    public void setSold_qt(int sold_qt) {
+        this.sold_qt = sold_qt;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
     public int getDiscount() {
@@ -115,6 +135,4 @@ public class Item {
     public void setImgurl(String imgurl) {
         this.imgurl = imgurl;
     }
-
-
 }

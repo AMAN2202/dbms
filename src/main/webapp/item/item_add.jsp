@@ -7,47 +7,14 @@
 <form:form method="POST"
            action="" modelAttribute="item">
     <table>
-        <tr>
-            <td><form:label path="brand_id">brand</form:label></td>
-            <td><form:input path="brand_id"/></td>
-        </tr>
-        <tr>
-            <td><form:label path="item_id">item_id</form:label></td>
-            <td><form:input path="item_id"/></td>
-        </tr>
-        <tr>
-            <td><form:label path="category">category</form:label></td>
-            <td><form:input path="category"/></td>
-        </tr>
-        <tr>
-            <td><form:label path="cost_price">cost</form:label></td>
-            <td><form:input path="cost_price"/></td>
-        </tr>
-        <tr>
-            <td><form:label path="discount">discount</form:label></td>
-            <td><form:input path="discount"/></td>
-        </tr>
-        <tr>
-            <td><form:label path="imgurl">img</form:label></td>
-            <td><form:input path="imgurl"/></td>
-        </tr>
-        <tr>
-            <td><form:label path="mrp">mrp</form:label></td>
-            <td><form:input path="mrp"/></td>
-        </tr>
-        <tr>
-            <td><form:label path="name">name</form:label></td>
-            <td><form:input path="name"/></td>
-        </tr>
-        <tr>
-            <td><form:label path="quantity_available">quantity</form:label></td>
-            <td><form:input path="quantity_available"/></td>
-        </tr>
-        <tr>
-            <td><form:label path="voucher_credit">benifits</form:label></td>
-            <td><form:input path="voucher_credit"/></td>
-        </tr>
-
+        <form:select path="brand_id" items="${bl}"/>
+        <% String[] textFields = {"category", "cost_price", "discount", "imgurl", "mrp", "name", "qt_avail", "rating", "sold_qt", "voucher_credits"};
+            for (int j = 0; j < textFields.length; j++) { %>
+        <TR>
+            <TD><%=textFields[j]%>:</TD>
+            <TD><INPUT TYPE=TEXT NAME=<%=textFields[j]%>></TD>
+        </TR>
+        <% } %>
         <tr>
             <td><input type="submit" value="Submit"/></td>
         </tr>

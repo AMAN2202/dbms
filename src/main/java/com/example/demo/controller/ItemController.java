@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.UserRepo;
+import com.example.demo.entity.Brand;
 import com.example.demo.entity.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("item")
 @Controller
@@ -32,7 +35,16 @@ public class ItemController {
 
     @RequestMapping("add")
     public ModelAndView add() {
-        return new ModelAndView("/item/item_add.jsp", "item", new Item());
+        ModelAndView m = new ModelAndView("/item/item_add.jsp");
+        Map<Integer, String> bl = new HashMap<Integer, String>();
+        List<Brand> l = userRepository.get_all_brand();
+        for (Brand b : l) {
+            bl.put(b.getBrand_id(), b.getBrand_name());
+        }
+        m.addObject("item", new Item());
+        m.addObject("bl", bl);
+        return m;
+
 
     }
 

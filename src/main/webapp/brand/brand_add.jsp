@@ -21,7 +21,7 @@
             <%--    </tr>--%>
             <%--        <tr>--%>
 
-        <% String[] textFields = {"brand_id", "brand_name", "logo"};
+                <% String[] textFields = {"brand_name", "logo"};
             for (int j = 0; j < textFields.length; j++) { %>
         <TR>
             <TD><%=textFields[j]%>:</TD>

@@ -18,14 +18,15 @@ public class Feedback {
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     Date date;
     int item_id;
+    int rating;
     int customer_id;
 
-
-    public Feedback(int feedback_id, @NotNull String description, Date date, int item_id, int customer_id) {
+    public Feedback(int feedback_id, @NotNull String description, Date date, int item_id, int rating, int customer_id) {
         this.feedback_id = feedback_id;
         this.description = description;
         this.date = date;
         this.item_id = item_id;
+        this.rating = rating;
         this.customer_id = customer_id;
     }
 
@@ -62,6 +63,14 @@ public class Feedback {
 
     public void setItem_id(int item_id) {
         this.item_id = item_id;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
     public int getCustomer_id() {

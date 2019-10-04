@@ -4,6 +4,7 @@ package com.example.demo.entity;
 //@Entity
 //@Table
 public class Cart {
+
     int customer_id;
     int item_id;
     int quantity;

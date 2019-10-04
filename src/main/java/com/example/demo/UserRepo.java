@@ -40,8 +40,9 @@ public class UserRepo {
     }
 
     public void addItem(Item item) {
-        String sql = "insert into item values(?,?,?,?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql, item.getItem_id(), item.getBrand_id(), item.getCategory(), item.getCost_price(), item.getDiscount(), item.getImgurl(), item.getMrp(), item.getName(), item.getQuantity_available(), item.getVoucher_credit());
+        String sql = "insert into item(brand_id,category,cost_price,imgurl,mrp,name,qt_avail,rating,sold_qt,voucher_credit,discount) values(?,?,?,?,?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql, item.getBrand_id(), item.getCategory(), item.getCost_price(), item.getImgurl(), item.getMrp(), item.getName(),
+                item.getQt_avail(), item.getRating(), item.getSold_qt(), item.getVoucher_credit(), item.getDiscount());
     }
 
     public Item get_item(int id) {
@@ -73,8 +74,8 @@ public class UserRepo {
     }
 
     public void addBrand(Brand brand) {
-        String sql = "insert into brand values(?,?,?)";
-        jdbcTemplate.update(sql, brand.getBrand_id(), brand.getBrand_name(), brand.getLogo());
+        String sql = "insert into brand(brand_name,logo) values(?,?)";
+        jdbcTemplate.update(sql, brand.getBrand_name(), brand.getLogo());
     }
 
     public void remove_brand(int brand_id) {

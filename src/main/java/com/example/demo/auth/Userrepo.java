@@ -13,11 +13,11 @@ public class Userrepo {
     // detects and creates jdbc template using the configuration
     @Autowired
     JdbcTemplate jdbcTemplate;
-
+    RandomGenerator r = new RandomGenerator();
 
     public void addUser(User u) {
-        String sql = "insert into user values(?,?,?)";
-        int result = jdbcTemplate.update(sql, u.getPassword(), u.getUsername(), u.getType());
+        String sql = "insert into user values(?,?,?,?,?)";
+        int result = jdbcTemplate.update(sql, u.getPassword(), 1, u.getUsername(), r.get(10), u.getType());
     }
 
 
