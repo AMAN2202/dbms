@@ -14,7 +14,6 @@ public class User {
     int active;
     String recovery_code;
 
-
     public User(String type, String username, String password, int active, String recovery_code) {
         this.type = type;
         this.username = username;

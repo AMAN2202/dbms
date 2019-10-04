@@ -13,7 +13,7 @@ public class InvoiceRowMapper implements RowMapper<Invoice> {
         i.setAmount(rs.getInt("amount"));
         i.setDate(rs.getDate("date"));
         i.setInvoice_id(rs.getInt("invoice_id"));
-        i.setSupplierid(rs.getInt("supplietr_id"));
+        i.setSupplierid(rs.getInt("supplierid"));
         return i;
     }
 }

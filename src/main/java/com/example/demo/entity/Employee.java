@@ -38,12 +38,12 @@ public class Employee {
         this.employee_id = employee_id;
     }
 
-    public String getUsernaqme() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUsernaqme(String usernaqme) {
-        this.username = usernaqme;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public int getPerson_id() {

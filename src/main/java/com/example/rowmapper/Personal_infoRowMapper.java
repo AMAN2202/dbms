@@ -16,7 +16,7 @@ public class Personal_infoRowMapper implements RowMapper<Personal_info> {
         p.setFirstname(rs.getString("firstname"));
         p.setLastname(rs.getString("lastname"));
         p.setGender(rs.getString("gender"));
-        p.setPhoneno(rs.getString("phone"));
+        p.setPhoneno(rs.getString("phoneno"));
         p.setZipcode(rs.getString("zipcode"));
         p.setAddress(rs.getString("address"));
         return p;
