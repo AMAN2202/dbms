@@ -468,4 +468,24 @@ public class WebController {
 
     }
 
+
+    @RequestMapping(value = "cart/delete/{id}")
+    public String delete_cart(@PathVariable int id) {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails) principal).getUsername();
+        Customer c = userRepository.get_customer_by_username(username);
+        Cart cart = new Cart();
+        cart.setItem_id(id);
+        cart.setCustomer_id(c.getCustomer_id());
+
+
+        userRepository.remove_cart(cart);
+
+
+        return "redirect:/cart";
+
+    }
+
+
 }
