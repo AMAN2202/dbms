@@ -282,4 +282,64 @@ public class WebController {
     }
 //Supplier End--------------------------------------------------------------------------------------------------------------------------------
 //Employee begin-------------------------------------------------------------------------------------------------------------------------------
+
+    @RequestMapping("employee")
+    public ModelAndView list_employee() {
+        List<Employee> e = userRepository.get_all_employee();
+        for (Employee x : e) {
+            x.setP(userRepository.get_perosnal_info_by_id(x.getPerson_id()));
+        }
+        ModelAndView model = new ModelAndView("/employee/list.jsp");
+        model.addObject("items", e);
+        return model;
+    }
+
+
+    @RequestMapping("employee/add")
+    public ModelAndView add_employee() {
+        ModelAndView m = new ModelAndView("/employee/add.jsp");
+        m.addObject("emp", new Employee());
+        return m;
+
+    }
+
+    @RequestMapping("employee/remove/{id}")
+    public String remove_employee(@PathVariable int id) {
+        userRepository.remove_employee(id);
+        return "redirect:/employee";
+    }
+
+    @RequestMapping(value = "employee/add", method = RequestMethod.POST)
+    public String submit_employee(@Valid @ModelAttribute("emp") Employee e,
+                                  BindingResult result, ModelMap model) {
+        if (result.hasErrors()) {
+            return "error.jsp";
+        }
+        if (e.getEmployee_id() == 0) {
+            userRepository.add_perosnal_info(e.getP());
+            Personal_info p = userRepository.get_Person_by_email(e.getP().getEmail());
+            e.setPerson_id(p.getPerson_id());
+            System.out.println(p.getPerson_id());
+            System.out.println(p.getLastname());
+            userRepository.add_employee(e);
+        } else {
+            System.out.println(e.getP().getEmail());
+            Personal_info p = e.getP();
+            p.setPerson_id(e.getPerson_id());
+            userRepository.update_personal_info(p);
+            userRepository.update_employee(e);
+        }
+
+        return "redirect:/employee";
+    }
+
+    @RequestMapping("employee/update/{id}")
+    public String update_employee(@PathVariable int id, Model model) {
+        Employee s = userRepository.get_employee(id);
+        s.setP(userRepository.get_perosnal_info_by_id(s.getPerson_id()));
+//        System.out.println(brand.getBrand_name());
+        model.addAttribute("emp", s);
+        return "/employee/add.jsp";
+    }
 }
+//Employee end

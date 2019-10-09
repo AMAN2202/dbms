@@ -181,6 +181,12 @@ public class UserRepo {
         jdbcTemplate.update(sql, e.getBalance(), e.getPerson_id(), e.getSalary(), e.getUsername());
     }
 
+    public void update_employee(Employee e) {
+        String sql = "update  employee set balance=?,salary=? where employee_id=?";
+        jdbcTemplate.update(sql, e.getBalance(), e.getSalary(), e.getEmployee_id());
+
+    }
+
     public List<Employee> get_all_employee() {
         String sql = "select * from employee";
         return jdbcTemplate.query(sql, new EmployeeRowMapper());

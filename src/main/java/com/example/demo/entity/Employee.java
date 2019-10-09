@@ -1,13 +1,12 @@
 package com.example.demo.entity;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@Entity
-@Table
+//@Entity
+//@Table
 public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     int employee_id;
 
 
@@ -18,6 +17,8 @@ public class Employee {
     int salary;
     @NotNull
     int balance;
+
+    Personal_info p;
 
 
     public Employee(String username, @NotNull int person_id, @NotNull int salary, @NotNull int balance) {
@@ -68,5 +69,13 @@ public class Employee {
 
     public void setBalance(int balance) {
         this.balance = balance;
+    }
+
+    public Personal_info getP() {
+        return p;
+    }
+
+    public void setP(Personal_info p) {
+        this.p = p;
     }
 }
