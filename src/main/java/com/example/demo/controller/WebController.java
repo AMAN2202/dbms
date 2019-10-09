@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.UserRepo;
 import com.example.demo.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -131,6 +133,62 @@ public class WebController {
         return new ModelAndView("/item/detail.jsp", "item", i);
 
     }
+
+    @RequestMapping(value = "item/add/cart/{id}")
+    public String add_item_cart(@PathVariable int id) {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails) principal).getUsername();
+        Customer c = userRepository.get_customer_by_username(username);
+        Cart cart = new Cart();
+        cart.setItem_id(id);
+        cart.setCustomer_id(c.getCustomer_id());
+
+
+        try {
+            cart = userRepository.find_cart(cart);
+        } catch (Exception e) {
+        }
+        cart.setQuantity(cart.getQuantity() + 1);
+
+
+        if (cart.getQuantity() == 1)
+            userRepository.add_cart(cart);
+        else {
+            userRepository.update_cart(cart);
+        }
+        return "redirect:/item/" + cart.getItem_id();
+
+    }
+
+
+    @RequestMapping(value = "item/remove/cart/{id}")
+    public String remove_item_cart(@PathVariable int id) {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails) principal).getUsername();
+        Customer c = userRepository.get_customer_by_username(username);
+        Cart cart = new Cart();
+        cart.setItem_id(id);
+        cart.setCustomer_id(c.getCustomer_id());
+
+
+        try {
+            cart = userRepository.find_cart(cart);
+        } catch (Exception e) {
+        }
+        cart.setQuantity(cart.getQuantity() - 1);
+
+
+        if (cart.getQuantity() == 0)
+            userRepository.remove_cart(cart);
+        else {
+            userRepository.update_cart(cart);
+        }
+        return "redirect:/item/" + cart.getItem_id();
+
+    }
+
 //Item End---------------------------------------------------------------------------------------------------------------------------------------
 //   Exp Begin-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -342,4 +400,5 @@ public class WebController {
         return "/employee/add.jsp";
     }
 }
-//Employee end
+//Employee end------------------------------------------------------------------------------------------------------------------------------------------
+//Cart item---------------------------------------------------------------------------------------------------------------------------------------------

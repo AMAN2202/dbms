@@ -209,6 +209,12 @@ public class UserRepo {
         jdbcTemplate.update(sql, c.getPerson_id(), c.getUsername());
     }
 
+    public Customer get_customer_by_username(String username) {
+        String sql = "select * from customer where username='" + username + "'";
+        System.out.println(sql);
+        return jdbcTemplate.queryForObject(sql, new CustomerRowMapper());
+    }
+
     public Customer get_customer(int id) {
         String sql = "select * from customer where customer_id=" + id;
         return jdbcTemplate.queryForObject(sql, new CustomerRowMapper());
@@ -387,6 +393,31 @@ public class UserRepo {
         String sql = "select * from personal_info where email='" + e + "'";
         System.out.println(sql);
         return jdbcTemplate.queryForObject(sql, new Personal_infoRowMapper());
+    }
+
+    //Cart---------------------------------------------------------------------------
+    public Cart find_cart(Cart cart) {
+        String sql = "select * from cart where item_id=" + cart.getItem_id() + " and customer_id=" + cart.getCustomer_id();
+        System.out.println(sql);
+        return jdbcTemplate.queryForObject(sql, new CartRowMapper());
+    }
+
+    public void add_cart(Cart cart) {
+        String sql = "insert into cart(item_id,quantity,customer_id) values(?,?,?)";
+        jdbcTemplate.update(sql, cart.getItem_id(), cart.getQuantity(), cart.getCustomer_id());
+
+    }
+
+    public void update_cart(Cart cart) {
+        String sql = "update cart set quantity=? where item_id=" + cart.getItem_id() + " and customer_id=" + cart.getCustomer_id();
+        jdbcTemplate.update(sql, cart.getQuantity());
+
+    }
+
+    public void remove_cart(Cart cart) {
+        String sql = "delete from cart where  item_id=" + cart.getItem_id() + " and customer_id=" + cart.getCustomer_id();
+        jdbcTemplate.update(sql);
+
     }
 }
 
