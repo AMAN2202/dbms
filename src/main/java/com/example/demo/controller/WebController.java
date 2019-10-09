@@ -399,6 +399,73 @@ public class WebController {
         model.addAttribute("emp", s);
         return "/employee/add.jsp";
     }
-}
-//Employee end------------------------------------------------------------------------------------------------------------------------------------------
+
+    //Employee end------------------------------------------------------------------------------------------------------------------------------------------
 //Cart item---------------------------------------------------------------------------------------------------------------------------------------------
+    @RequestMapping("cart")
+    public String cart(Model model) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails) principal).getUsername();
+        Customer c = userRepository.get_customer_by_username(username);
+
+        List<Cart> cart = userRepository.get_cart_by_customer(c.getCustomer_id());
+        model.addAttribute("items", cart);
+        return "cart/list.jsp";
+    }
+
+    @RequestMapping(value = "cart/add/{id}")
+    public String add_cart(@PathVariable int id) {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails) principal).getUsername();
+        Customer c = userRepository.get_customer_by_username(username);
+        Cart cart = new Cart();
+        cart.setItem_id(id);
+        cart.setCustomer_id(c.getCustomer_id());
+
+
+        try {
+            cart = userRepository.find_cart(cart);
+        } catch (Exception e) {
+        }
+        cart.setQuantity(cart.getQuantity() + 1);
+
+
+        if (cart.getQuantity() == 1)
+            userRepository.add_cart(cart);
+        else {
+            userRepository.update_cart(cart);
+        }
+        return "redirect:/cart";
+
+    }
+
+
+    @RequestMapping(value = "cart/remove/{id}")
+    public String remove_cart(@PathVariable int id) {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails) principal).getUsername();
+        Customer c = userRepository.get_customer_by_username(username);
+        Cart cart = new Cart();
+        cart.setItem_id(id);
+        cart.setCustomer_id(c.getCustomer_id());
+
+
+        try {
+            cart = userRepository.find_cart(cart);
+        } catch (Exception e) {
+        }
+        cart.setQuantity(cart.getQuantity() - 1);
+
+
+        if (cart.getQuantity() == 0)
+            userRepository.remove_cart(cart);
+        else {
+            userRepository.update_cart(cart);
+        }
+        return "redirect:/cart";
+
+    }
+
+}

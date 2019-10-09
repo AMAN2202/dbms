@@ -419,5 +419,11 @@ public class UserRepo {
         jdbcTemplate.update(sql);
 
     }
+
+    public List<Cart> get_cart_by_customer(int customer_id) {
+        String sql = "select * from cart where customer_id=" + customer_id;
+        System.out.println(sql);
+        return jdbcTemplate.query(sql, new CartRowMapper());
+    }
 }
 
