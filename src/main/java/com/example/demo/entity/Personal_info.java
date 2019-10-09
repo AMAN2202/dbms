@@ -119,4 +119,12 @@ public class Personal_info {
     public void setPhoneno(String phoneno) {
         this.phoneno = phoneno;
     }
+
+    public int getPerson_id() {
+        return person_id;
+    }
+
+    public void setPerson_id(int person_id) {
+        this.person_id = person_id;
+    }
 }

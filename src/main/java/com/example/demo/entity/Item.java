@@ -20,9 +20,9 @@ public class Item {
     int voucher_credit;
     String category;
     String imgurl;
+    String description;
 
-
-    public Item(int item_id, String name, int qt_avail, int cost_price, int mrp, int brand_id, int sold_qt, int rating, int discount, int voucher_credit, String category, String imgurl) {
+    public Item(int item_id, String name, int qt_avail, int cost_price, int mrp, int brand_id, int sold_qt, int rating, int discount, int voucher_credit, String category, String imgurl, String description) {
         this.item_id = item_id;
         this.name = name;
         this.qt_avail = qt_avail;
@@ -35,6 +35,7 @@ public class Item {
         this.voucher_credit = voucher_credit;
         this.category = category;
         this.imgurl = imgurl;
+        this.description = description;
     }
 
     public Item() {
@@ -134,5 +135,13 @@ public class Item {
 
     public void setImgurl(String imgurl) {
         this.imgurl = imgurl;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

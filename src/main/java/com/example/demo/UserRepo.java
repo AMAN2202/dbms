@@ -38,9 +38,9 @@ public class UserRepo {
     }
 
     public void addItem(Item item) {
-        String sql = "insert into item(brand_id,category,cost_price,imgurl,mrp,name,qt_avail,rating,sold_qt,voucher_credit,discount) values(?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into item(brand_id,category,cost_price,imgurl,mrp,name,qt_avail,rating,sold_qt,voucher_credit,discount,description) values(?,?,?,?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql, item.getBrand_id(), item.getCategory(), item.getCost_price(), item.getImgurl(), item.getMrp(), item.getName(),
-                item.getQt_avail(), item.getRating(), item.getSold_qt(), item.getVoucher_credit(), item.getDiscount());
+                item.getQt_avail(), item.getRating(), item.getSold_qt(), item.getVoucher_credit(), item.getDiscount(), item.getDescription());
     }
 
     public Item get_item(int id) {
@@ -88,9 +88,14 @@ public class UserRepo {
     }
 
     //-----------------------------------------------supplier-------------------------
-    public Brand get_supplier(int id) {
+    public List<Personal_info> get_all_supplier() {
+        String sql = "select * from personal_info where person_id in(select person_id from supplier)";
+        return jdbcTemplate.query(sql, new Personal_infoRowMapper());
+    }
+
+    public Supplier get_supplier(int id) {
         String sql = "select * from supplier where supplier_id=" + id;
-        return jdbcTemplate.queryForObject(sql, new BrandRowMapper());
+        return jdbcTemplate.queryForObject(sql, new SupplierRowMapper());
     }
 
     public List<Brand> get_all_brand_by_supplier(int id) {
@@ -106,9 +111,14 @@ public class UserRepo {
 
     }
 
+    public void update_supplier(Supplier s) {
+        String sql = "update supplier set person_id=? where supplier_id=?";
+        jdbcTemplate.update(sql, s.getPerson_id(), s.getSupplier_id());
+    }
+
     public void addSupplier(Supplier s) {
-        String sql = "insert into supplier values(?,?)";
-        jdbcTemplate.update(sql, s.getSupplier_id(), s.getPerson_id());
+        String sql = "insert into supplier(person_id) values(?)";
+        jdbcTemplate.update(sql, s.getPerson_id());
     }
 
     public void remove_supplier(int id) {
@@ -116,10 +126,21 @@ public class UserRepo {
         jdbcTemplate.update(sql);
     }
 
+
     //------------------------------------------------------Expenses-------------------
+    public Expenses get_Expence(int id) {
+        String sql = "select * from expenses where expenses_id=" + id;
+        return jdbcTemplate.queryForObject(sql, new ExpensesRowMapper());
+
+    }
     public void addExpenses(Expenses exp) {
         String sql = "insert into expenses(amount,description,type) values(?,?,?)";
         jdbcTemplate.update(sql, exp.getAmount(), exp.getDescription(), exp.getType());
+    }
+
+    public void update_Exenses(Expenses exp) {
+        String sql = "update expenses set amount=?,description=?,type=? where expenses_id=?";
+        jdbcTemplate.update(sql, exp.getAmount(), exp.getDescription(), exp.getType(), exp.getExpenses_id());
     }
 
     public List<Expenses> get_all_Expenses() {
@@ -133,6 +154,12 @@ public class UserRepo {
     }
 
     //-----------------------------------------------------Personal_info--------------------------
+    public void update_personal_info(Personal_info p) {
+        String sql = "update  personal_info set gender=?,address=?,adharno=?,dob=?,email=?,firstname=?,lastname=?,phoneno=?,zipcode=? where person_id=?";
+        jdbcTemplate.update(sql, p.getGender(), p.getAddress(), p.getAdharno(), p.getDob(), p.getEmail(), p.getFirstname(), p.getLastname(), p.getPhoneno(), p.getZipcode(), p.getPerson_id());
+
+
+    }
     public void add_perosnal_info(Personal_info p) {
         String sql = "insert into personal_info(gender,address,adharno,dob,email,firstname,lastname,phoneno,zipcode) values(?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql, p.getGender(), p.getAddress(), p.getAdharno(), p.getDob(), p.getEmail(), p.getFirstname(), p.getLastname(), p.getPhoneno(), p.getZipcode());
@@ -269,6 +296,13 @@ public class UserRepo {
         return jdbcTemplate.query(sql, new IncomeTaxRowMapper());
     }
 
+    public void update_Tax(Income_tax i) {
+        String sql = "update income_tax set amount=?, penality=? where income_tax_id=?";
+
+        jdbcTemplate.update(sql, i.getAmount(), i.getPenality(), i.getIncome_tax_id());
+    }
+
+
     public void remove_Income_tax(int id) {
         String sql = "delete from income_tax where income_tax_id=" + id;
         jdbcTemplate.update(sql);
@@ -314,6 +348,39 @@ public class UserRepo {
     public void remove_User(String username) {
         String sql = "delete from user where username=?";
         jdbcTemplate.update(sql, username);
+    }
+
+    // -----------------------------------------Wages----------------------------------------------
+    public void add_Wage(Wages w) {
+        String sql = "insert into wages(amount,employee_id) values(?,?)";
+        jdbcTemplate.update(sql, w.getAmount(), w.getEmployee_id());
+    }
+
+    public Wages get_Wages(int id) {
+        String sql = "select * from wages where wage_id=" + id;
+        return jdbcTemplate.queryForObject(sql, new WagesRowMapper());
+    }
+
+    public List<Wages> get_all_Wage_by_employee(int id) {
+        String sql = "select *  from  wages where employee_id=" + id;
+        return jdbcTemplate.query(sql, new WagesRowMapper());
+    }
+
+
+    public List<Wages> get_all_Wages() {
+        String sql = "select *  from  wages ";
+        return jdbcTemplate.query(sql, new WagesRowMapper());
+    }
+
+    public void remove_Wage(int id) {
+        String sql = "delete from wages where wage_id=?";
+        jdbcTemplate.update(sql, id);
+    }
+
+    public Personal_info get_Person_by_email(String e) {
+        String sql = "select * from personal_info where email='" + e + "'";
+        System.out.println(sql);
+        return jdbcTemplate.queryForObject(sql, new Personal_infoRowMapper());
     }
 }
 

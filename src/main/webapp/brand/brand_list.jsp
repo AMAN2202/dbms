@@ -19,19 +19,7 @@
     </c:forEach>
 
 </table>
-<div class="container" id="mainDiv"> {{firstName}}</div>
 
 </body>
-<script type="text/javascript">
 
-
-    var app = new Vue({
-        el: '#mainDiv',
-        data: {
-            firstName: 'name',
-            lastName: 'lName',
-            description: 'desc'
-        }
-    });
-</script>
 </html>
