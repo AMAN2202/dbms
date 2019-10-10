@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -27,6 +29,7 @@ public class Personal_info {
     @NotNull
     String address;
     @NotNull
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     Date dob;
     String adharno;
     @NotNull

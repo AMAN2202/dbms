@@ -26,6 +26,8 @@ import java.util.Map;
 ///exp
 ///tax
 ///supplier
+//cart
+//Emi
 
 
 @Controller
@@ -52,7 +54,10 @@ public class WebController {
 
     @RequestMapping("brand/add")
     public ModelAndView add_brand() {
-        return new ModelAndView("/brand/add.jsp", "brand", new Brand());
+        ModelAndView m = new ModelAndView("/brand/add.jsp");
+        m.addObject("brand", new Brand());
+        m.addObject("action", "add");
+        return m;
 
     }
 
@@ -61,6 +66,7 @@ public class WebController {
         Brand brand = userRepository.get_brand(id);
 //        System.out.println(brand.getBrand_name());
         model.addAttribute("brand", brand);
+        model.addAttribute("action", "update");
         return "/brand/add.jsp";
 
     }
@@ -87,8 +93,12 @@ public class WebController {
 
     @RequestMapping("item")
     public ModelAndView list_item() {
+        ItemFilter f = new ItemFilter();
+        f.setMin_p(0);
+        f.setMax_p(1000000);
         List<Item> items = userRepository.get_all_item();
         ModelAndView model = new ModelAndView("/item/list.jsp");
+        model.addObject("filter", f);
         model.addObject("items", items);
         return model;
     }
@@ -104,6 +114,7 @@ public class WebController {
         }
         m.addObject("item", new Item());
         m.addObject("bl", bl);
+        m.addObject("action", "add");
         return m;
 
 
@@ -204,6 +215,7 @@ public class WebController {
     @RequestMapping("exp/add")
     public ModelAndView add_exp() {
         ModelAndView m = new ModelAndView("/expenses/add.jsp");
+        m.addObject("action", "add");
         m.addObject("exp", new Expenses());
         return m;
 
@@ -215,7 +227,12 @@ public class WebController {
         return "redirect:/exp";
     }
 
-    @RequestMapping(value = "exp/add", method = RequestMethod.POST)
+    @RequestMapping(value = "exp/add", method = RequestMethod.POST, params = "cancel")
+    public String submit_exp() {
+        return "redirect:/exp";
+    }
+
+    @RequestMapping(value = "exp/add", method = RequestMethod.POST, params = "submit")
     public String submit_exp(@Valid @ModelAttribute("e") Expenses expenses,
                              BindingResult result, ModelMap model) {
         if (result.hasErrors()) {
@@ -233,6 +250,7 @@ public class WebController {
         Expenses exp = userRepository.get_Expence(id);
 //        System.out.println(brand.getBrand_name());
         model.addAttribute("exp", exp);
+        model.addAttribute("Action", "update");
         return "/expenses/add.jsp";
 
     }
@@ -253,6 +271,7 @@ public class WebController {
     public ModelAndView add_tax() {
         ModelAndView m = new ModelAndView("/tax/add.jsp");
         m.addObject("tax", new Income_tax());
+        m.addObject("action", "add");
         return m;
 
     }
@@ -263,7 +282,12 @@ public class WebController {
         return "redirect:/tax";
     }
 
-    @RequestMapping(value = "tax/add", method = RequestMethod.POST)
+    @RequestMapping(value = "tax/add", method = RequestMethod.POST, params = "cancel")
+    public String submit_tax() {
+        return "redirect:/tax";
+    }
+
+    @RequestMapping(value = "tax/add", method = RequestMethod.POST, params = "submit")
     public String submit_tax(@Valid @ModelAttribute("tax") Income_tax i,
                              BindingResult result, ModelMap model) {
         if (result.hasErrors()) {
@@ -281,6 +305,7 @@ public class WebController {
         Income_tax i = userRepository.get_Income_tax(id);
 //        System.out.println(brand.getBrand_name());
         model.addAttribute("tax", i);
+        model.addAttribute("action", "update");
         return "/tax/add.jsp";
 
     }
@@ -289,10 +314,25 @@ public class WebController {
 
     @RequestMapping("supplier")
     public ModelAndView list_supplier() {
-        List<Personal_info> e = userRepository.get_all_supplier();
+        List<Supplier> e = userRepository.get_all_supplier();
+        for (Supplier s : e) {
+            s.setP(userRepository.get_perosnal_info_by_id(s.getPerson_id()));
+        }
         ModelAndView model = new ModelAndView("/supplier/list.jsp");
         model.addObject("items", e);
         return model;
+    }
+
+    @RequestMapping("supplier/{id}")
+    public String supplier_details(@PathVariable int id, Model m) {
+        Supplier s = userRepository.get_supplier(id);
+        s.setP(userRepository.get_perosnal_info_by_id(s.getPerson_id()));
+        m.addAttribute("b", s);
+//        List<Brand> brand=userRepository.get_all_brand_by_supplier(id);
+//        m.addAttribute("brands",brand);
+//        List<Item> item=userRepository.get_all_item_by_supplier(id);
+//        m.addAttribute("items",item);
+        return "/supplier/detail.jsp";
     }
 
 
@@ -300,9 +340,11 @@ public class WebController {
     public ModelAndView add_supplier() {
         ModelAndView m = new ModelAndView("/supplier/add.jsp");
         m.addObject("person", new Personal_info());
+        m.addObject("action", "add");
         return m;
 
     }
+
 
     @RequestMapping("supplier/remove/{id}")
     public String remove_supplier(@PathVariable int id) {
@@ -310,9 +352,17 @@ public class WebController {
         return "redirect:/supplier";
     }
 
-    @RequestMapping(value = "supplier/add", method = RequestMethod.POST)
+
+    @RequestMapping(value = "supplier/add", method = RequestMethod.POST, params = "cancel")
+    public String submit_supplier_cancel() {
+        return "redirect:/supplier";
+
+    }
+
+    @RequestMapping(value = "supplier/add", method = RequestMethod.POST, params = "submit")
     public String submit_supplier(@Valid @ModelAttribute("person") Personal_info p,
                                   BindingResult result, ModelMap model) {
+        System.out.println(p.getDob());
         if (result.hasErrors()) {
             return "error.jsp";
         }
@@ -335,7 +385,9 @@ public class WebController {
     public String update_supplier(@PathVariable int id, Model model) {
         Supplier s = userRepository.get_supplier(id);
 //        System.out.println(brand.getBrand_name());
+
         model.addAttribute("person", userRepository.get_perosnal_info_by_id(s.getPerson_id()));
+        model.addAttribute("action", "update");
         return "/supplier/add.jsp";
     }
 //Supplier End--------------------------------------------------------------------------------------------------------------------------------
@@ -352,11 +404,22 @@ public class WebController {
         return model;
     }
 
+    @RequestMapping("employee/{id}")
+    public ModelAndView list_employee(@PathVariable int id) {
+        Employee e = userRepository.get_employee(id);
+        e.setP(userRepository.get_perosnal_info_by_id(e.getPerson_id()));
+        ModelAndView model = new ModelAndView("/employee/detail.jsp");
+        model.addObject("b", e);
+        return model;
+    }
+
+
 
     @RequestMapping("employee/add")
     public ModelAndView add_employee() {
         ModelAndView m = new ModelAndView("/employee/add.jsp");
         m.addObject("emp", new Employee());
+        m.addObject("action", "add");
         return m;
 
     }
@@ -367,7 +430,12 @@ public class WebController {
         return "redirect:/employee";
     }
 
-    @RequestMapping(value = "employee/add", method = RequestMethod.POST)
+    @RequestMapping(value = "employee/add", method = RequestMethod.POST, params = "cancel")
+    public String submit_employee_cancel() {
+        return "redirect:/employee";
+    }
+
+    @RequestMapping(value = "employee/add", method = RequestMethod.POST, params = "submit")
     public String submit_employee(@Valid @ModelAttribute("emp") Employee e,
                                   BindingResult result, ModelMap model) {
         if (result.hasErrors()) {
@@ -397,6 +465,7 @@ public class WebController {
         s.setP(userRepository.get_perosnal_info_by_id(s.getPerson_id()));
 //        System.out.println(brand.getBrand_name());
         model.addAttribute("emp", s);
+        model.addAttribute("action", "update");
         return "/employee/add.jsp";
     }
 
@@ -478,12 +547,39 @@ public class WebController {
         Cart cart = new Cart();
         cart.setItem_id(id);
         cart.setCustomer_id(c.getCustomer_id());
-
-
         userRepository.remove_cart(cart);
-
-
         return "redirect:/cart";
+
+    }
+
+    //Cart end--------------------------------------------------------------------------------------------------------------------------------
+//Emi add---------------------------------------------------------------------------------------------------------------------------------
+    @RequestMapping("emi")
+    public String list_emi(Model model) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails) principal).getUsername();
+        Customer c = userRepository.get_customer_by_username(username);
+        List<Emi> l = userRepository.get_all_Emi_by_customer(c.getCustomer_id());
+        model.addAttribute("items", l);
+        return "emi/list.jsp";
+    }
+
+
+    @RequestMapping(value = "emi/add/{id}/{time}")
+    public String add_emi(@PathVariable int id, @PathVariable int time) {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails) principal).getUsername();
+        Customer c = userRepository.get_customer_by_username(username);
+        Emi e = new Emi();
+        Item i = userRepository.get_item(id);
+        e.setItem_id(id);
+        e.setPrincipal(i.getMrp() - i.getDiscount() * i.getMrp());
+        e.setIntrest(10);
+        e.setTot_fraction(time);
+        e.setCustomer_id(c.getCustomer_id());
+        userRepository.add_Emi(e);
+        return "redirect:/emi";
 
     }
 

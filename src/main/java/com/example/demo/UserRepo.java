@@ -38,9 +38,9 @@ public class UserRepo {
     }
 
     public void addItem(Item item) {
-        String sql = "insert into item(brand_id,category,cost_price,imgurl,mrp,name,qt_avail,rating,sold_qt,voucher_credit,discount,description) values(?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into item(brand_id,category,cost_price,imgurl,mrp,name,qt_avail,rating,sold_qt,discount,description) values(?,?,?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql, item.getBrand_id(), item.getCategory(), item.getCost_price(), item.getImgurl(), item.getMrp(), item.getName(),
-                item.getQt_avail(), item.getRating(), item.getSold_qt(), item.getVoucher_credit(), item.getDiscount(), item.getDescription());
+                item.getQt_avail(), item.getRating(), item.getSold_qt(), item.getDiscount(), item.getDescription());
     }
 
     public Item get_item(int id) {
@@ -88,9 +88,9 @@ public class UserRepo {
     }
 
     //-----------------------------------------------supplier-------------------------
-    public List<Personal_info> get_all_supplier() {
-        String sql = "select * from personal_info where person_id in(select person_id from supplier)";
-        return jdbcTemplate.query(sql, new Personal_infoRowMapper());
+    public List<Supplier> get_all_supplier() {
+        String sql = "select * from supplier";
+        return jdbcTemplate.query(sql, new SupplierRowMapper());
     }
 
     public Supplier get_supplier(int id) {
@@ -122,7 +122,7 @@ public class UserRepo {
     }
 
     public void remove_supplier(int id) {
-        String sql = "delete from supplier where supplier_id=" + id;
+        String sql = "delete from personal_info where person_id=" + id;
         jdbcTemplate.update(sql);
     }
 
@@ -232,8 +232,8 @@ public class UserRepo {
 
     //----------------------------------------Emi-------------------------------------------------------
     public void add_Emi(Emi e) {
-        String sql = "insert into emi(intrest,customer_id,item_id,paid_fraction,pending,tot_fraction) values(?,?,?,?,?,?)";
-        jdbcTemplate.update(sql, e.getIntrest(), e.getCustomer_id(), e.getItem_id(), e.getPaid_fraction(), e.getPending(), e.getTot_fraction());
+        String sql = "insert into emi(intrest,customer_id,item_id,paid_fraction,pending,tot_fraction,principal) values(?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql, e.getIntrest(), e.getCustomer_id(), e.getItem_id(), e.getPaid_fraction(), e.getPending(), e.getTot_fraction(), e.getPrincipal());
     }
 
     public Emi get_Emi(int id) {

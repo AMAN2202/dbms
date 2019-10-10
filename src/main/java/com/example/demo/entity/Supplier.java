@@ -1,14 +1,13 @@
 package com.example.demo.entity;
 
-import javax.persistence.*;
-
-@Entity
-@Table
+//@Entity
+//@Table
 public class Supplier {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     int supplier_id;
     int person_id;
+    Personal_info p;
 
 
     public Supplier(int person_id, String username) {
@@ -17,6 +16,11 @@ public class Supplier {
     }
 
     public Supplier() {
+    }
+
+    public Supplier(int person_id, Personal_info p) {
+        this.person_id = person_id;
+        this.p = p;
     }
 
     public int getSupplier_id() {
@@ -35,4 +39,11 @@ public class Supplier {
         this.person_id = person_id;
     }
 
+    public Personal_info getP() {
+        return p;
+    }
+
+    public void setP(Personal_info p) {
+        this.p = p;
+    }
 }

@@ -18,7 +18,6 @@ public class ItemRowMapper implements RowMapper<Item> {
         i.setMrp(rs.getInt("mrp"));
         i.setBrand_id(rs.getInt("brand_id"));
         i.setDiscount(rs.getInt("discount"));
-        i.setVoucher_credit(rs.getInt("voucher_credit"));
         i.setCategory(rs.getString("category"));
         i.setImgurl(rs.getString("imgurl"));
         i.setDescription(rs.getString("description"));

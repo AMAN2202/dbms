@@ -17,7 +17,6 @@ public class Item {
     int sold_qt;
     int rating;
     int discount;
-    int voucher_credit;
     String category;
     String imgurl;
     String description;
@@ -32,7 +31,6 @@ public class Item {
         this.sold_qt = sold_qt;
         this.rating = rating;
         this.discount = discount;
-        this.voucher_credit = voucher_credit;
         this.category = category;
         this.imgurl = imgurl;
         this.description = description;
@@ -113,13 +111,7 @@ public class Item {
         this.discount = discount;
     }
 
-    public int getVoucher_credit() {
-        return voucher_credit;
-    }
 
-    public void setVoucher_credit(int voucher_credit) {
-        this.voucher_credit = voucher_credit;
-    }
 
     public String getCategory() {
         return category;

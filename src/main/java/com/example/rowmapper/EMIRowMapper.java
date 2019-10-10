@@ -17,6 +17,8 @@ public class EMIRowMapper implements RowMapper<Emi> {
         e.setTot_fraction(rs.getInt("tot_fraction"));
         e.setPending(rs.getInt("pending"));
         e.setEmi_id(rs.getInt("emi_id"));
+        e.setPrincipal(rs.getInt("principal"));
+        e.setDate(rs.getDate("date"));
         return e;
 
     }
