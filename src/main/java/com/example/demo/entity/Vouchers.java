@@ -12,6 +12,7 @@ public class Vouchers {
     int voucher_id;
     @NotNull
     int credits;
+    int active;
 
     int customerid;
 
@@ -45,5 +46,13 @@ public class Vouchers {
 
     public void setCustomerid(int customerid) {
         this.customerid = customerid;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
     }
 }

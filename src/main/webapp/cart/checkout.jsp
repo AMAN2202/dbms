@@ -1,5 +1,5 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
 
@@ -66,51 +66,56 @@
             <th>
                 Subtottal
             </th>
-            <th>
-                Action
-            </th>
+
             </thead>
-    <c:forEach var="b" items="${items}">
-        <tr>
-            <td>
-                <img src="${b.i.imgurl}" class="img-fluid" width="200px"/>
-            </td>
+            <c:forEach var="b" items="${items}">
+                <tr>
+                    <td>
+                        <img src="${b.i.imgurl}" class="img-fluid" width="200px"/>
+                    </td>
 
-            <td>${b.i.name}</td>
-            <td>$${b.i.mrp}</td>
-            <td>${b.i.discount}%</td>
-            <td>${b.quantity}</td>
-            <td>
-                $${b.quantity*b.i.mrp*(1-b.i.discount/100)}
-            </td>
+                    <td>${b.i.name}</td>
+                    <td>$${b.i.mrp}</td>
+                    <td>${b.i.discount}%</td>
+                    <td>${b.quantity}</td>
+                    <td>
+                        $${b.quantity*b.i.mrp*(1-b.i.discount/100)}
+                    </td>
 
-            <td>
-                <a class="btn btn-danger" href="/cart/remove/${b.item_id}">Remove</a>
 
-                <a class="btn btn-success" href="/cart/add/${b.item_id}">Add</a>
+                </tr>
+            </c:forEach>
 
-                <a class="btn btn-success" href="/cart/delete/${b.item_id}">Delete</a>
-            </td>
+        </table>
+        <div class="container mx-auto">
 
-        </tr>
-    </c:forEach>
 
-</table>
-        <div class="row">
-            <div class="col-3"></div>
-            <div class="col-6"></div>
-            <div class="col-3 float-right">
-                Total: <span class="text-info">$${total}</span>
-            </div>
-            <div class="container">
-                <a class="btn btn-success" href="/checkout">Checkout</a>
-                <a class="btn btn-info" href="/item">Continue Shopping</a>
-            </div>
+            <form:form method="POST" action="" modelAttribute="vc">
+                <div class="row mt-4">
+                    <div class="col-8 text-info">
+                        Choose Voucher
+                        <form:select path="id" class="mdb-select col-2" items="${bl}"/>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-danger">Total:$${total}</div>
+                        <input type="submit" name="cancel" class="btn btn-success" value="Cart"/>
+                        <input type="submit" name="submit" class="btn btn-success" value="Checkout"/>
+                    </div>
+                </div>
+            </form:form>
+
         </div>
     </c:otherwise>
 </c:choose>
+
+
 </body>
 <script type="text/javascript">
+
+
+    $(document).ready(function () {
+        $('.mdb-select').material_select();
+    });
     <c:choose>
     <c:when test="${empty message}">
 

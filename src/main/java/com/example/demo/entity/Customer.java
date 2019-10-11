@@ -1,15 +1,15 @@
 package com.example.demo.entity;
 
-import javax.persistence.*;
-
-@Entity
-@Table
+//@Entity
+//@Table
 public class Customer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     int customer_id;
     int person_id;
     String username;
+    Personal_info p;
+
 
     public Customer(int customer_id, int person_id, String type) {
         this.customer_id = customer_id;
@@ -46,5 +46,13 @@ public class Customer {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Personal_info getP() {
+        return p;
+    }
+
+    public void setP(Personal_info p) {
+        this.p = p;
     }
 }

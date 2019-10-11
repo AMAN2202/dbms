@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
@@ -41,24 +42,15 @@ public class HomeController {
     }
 
     @RequestMapping("/")
-    public String home(Model model) {
+    public String home(Model model, final RedirectAttributes redirectAttributes) {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (principal instanceof UserDetails) {
 
             String username = ((UserDetails) principal).getUsername();
             model.addAttribute("username", username);
 
-        } else {
-
-            String username = principal.toString();
-            model.addAttribute("username", username);
-
-        }
-
-
-        return "home.jsp";
+        redirectAttributes.addFlashAttribute("message", "Welcome " + username);
+        return "redirect:/item";
     }
 
     @RequestMapping("/login")

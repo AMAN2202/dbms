@@ -8,7 +8,7 @@ public class Cart {
     int customer_id;
     int item_id;
     int quantity;
-
+    Item i;
     public Cart(int customer_id, int item_id, int quantity) {
         this.customer_id = customer_id;
         this.item_id = item_id;
@@ -40,5 +40,13 @@ public class Cart {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public Item getI() {
+        return i;
+    }
+
+    public void setI(Item i) {
+        this.i = i;
     }
 }

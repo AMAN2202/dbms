@@ -5,8 +5,10 @@ import com.example.demo.entity.*;
 import com.example.rowmapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository
@@ -348,7 +350,7 @@ public class UserRepo {
     }
 
     public User get_User(String username) {
-        String sql = "select * from user where username=" + username;
+        String sql = "select * from user where username='" + username + "'";
         return jdbcTemplate.queryForObject(sql, new UserRowMapper());
     }
 
@@ -424,6 +426,63 @@ public class UserRepo {
         String sql = "select * from cart where customer_id=" + customer_id;
         System.out.println(sql);
         return jdbcTemplate.query(sql, new CartRowMapper());
+    }
+
+    public Vouchers get_voucher(int id) {
+        String sql = "select * from voucher where voucher_id=" + id;
+        return jdbcTemplate.queryForObject(sql, new VoucherrowMapper());
+    }
+
+    public long add_reciept(Reciept r) {
+        String sql = "insert into reciept(amount,amount_payed,customer_id,discount) values(?,?,?,?)";
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+
+        // the name of the generated column (you can track more than one column)
+        String id_column = "receipt_id";
+
+        // the update method takes an implementation of PreparedStatementCreator which could be a lambda
+        jdbcTemplate.update(con -> {
+                    PreparedStatement ps = con.prepareStatement(sql, new String[]{id_column});
+                    ps.setInt(1, r.getAmount());
+                    ps.setInt(2, r.getAmount_payed());
+                    ps.setInt(3, r.getCustomer_id());
+                    ps.setInt(4, r.getDiscount());
+                    return ps;
+                }
+                , keyHolder);
+
+        // after the update executed we can now get the value of the generated ID
+        return (long) keyHolder.getKey();
+
+
+//        jdbcTemplate.update(sql,r.getAmount(),r.getAmount_payed(),r.getCustomer_id(),r.getDiscount());
+    }
+
+    public void update_voucher(Vouchers v) {
+        String sql = "update voucher set active=? where voucher_id=?";
+        jdbcTemplate.update(sql, v.getActive(), v.getVoucher_id());
+    }
+
+    public void add_ritem(Cart i, long receipt_id) {
+        String sql = "insert into ritem(rid,item_id,mrp,discount,quantity) values(?,?,?,?,?)";
+        jdbcTemplate.update(sql, receipt_id, i.getItem_id(), i.getI().getMrp(), i.getI().getDiscount(), i.getQuantity());
+    }
+
+    public void clear_cart(int customer_id) {
+        String sql = "delete from cart where customer_id=" + customer_id;
+        jdbcTemplate.update(sql);
+    }
+
+    public List<Vouchers> get_all_voucher(int customer_id) {
+
+        String sql = "select * from voucher where customerid=" + customer_id;
+        return jdbcTemplate.query(sql, new VoucherrowMapper());
+
+    }
+
+    public void add_voucher(Vouchers v2) {
+        String sql = "insert into voucher(credits,customerid,active) values(?,?,?)";
+        jdbcTemplate.update(sql, v2.getCredits(), v2.getCustomerid(), v2.getActive());
     }
 }
 

@@ -9,7 +9,7 @@ import java.util.Date;
 public class Reciept {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    int receipt_id;
+    long receipt_id;
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     Date date;
     @NotNull
@@ -30,11 +30,11 @@ public class Reciept {
     public Reciept() {
     }
 
-    public int getReceipt_id() {
+    public long getReceipt_id() {
         return receipt_id;
     }
 
-    public void setReceipt_id(int receipt_id) {
+    public void setReceipt_id(long receipt_id) {
         this.receipt_id = receipt_id;
     }
 
