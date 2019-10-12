@@ -3,10 +3,11 @@ package com.example.demo.entity;
 public class ItemFilter {
     int brand_id;
     String name;
-    int min_p;
-    int max_p;
-    int rating;
-
+    int min_p = 0;
+    int max_p = 100000;
+    int rating = 0;
+    int discount = 0;
+    int qnt = 0;
 
     public ItemFilter(int brand_id, String name, int min_p, int max_p, int rating) {
         this.brand_id = brand_id;
@@ -57,5 +58,21 @@ public class ItemFilter {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
+    }
+
+    public int getQnt() {
+        return qnt;
+    }
+
+    public void setQnt(int qnt) {
+        this.qnt = qnt;
     }
 }

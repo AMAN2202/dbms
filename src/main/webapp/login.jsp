@@ -81,7 +81,7 @@
 
             <!-- Register -->
             <p>Not a member?
-                <a href="">Register</a>
+                <a href="/add">Register</a>
             </p>
 
 

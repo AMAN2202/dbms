@@ -135,6 +135,7 @@ public class UserRepo {
         return jdbcTemplate.queryForObject(sql, new ExpensesRowMapper());
 
     }
+
     public void addExpenses(Expenses exp) {
         String sql = "insert into expenses(amount,description,type) values(?,?,?)";
         jdbcTemplate.update(sql, exp.getAmount(), exp.getDescription(), exp.getType());
@@ -162,6 +163,7 @@ public class UserRepo {
 
 
     }
+
     public void add_perosnal_info(Personal_info p) {
         String sql = "insert into personal_info(gender,address,adharno,dob,email,firstname,lastname,phoneno,zipcode) values(?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql, p.getGender(), p.getAddress(), p.getAdharno(), p.getDob(), p.getEmail(), p.getFirstname(), p.getLastname(), p.getPhoneno(), p.getZipcode());
@@ -483,6 +485,50 @@ public class UserRepo {
     public void add_voucher(Vouchers v2) {
         String sql = "insert into voucher(credits,customerid,active) values(?,?,?)";
         jdbcTemplate.update(sql, v2.getCredits(), v2.getCustomerid(), v2.getActive());
+    }
+
+    public List<Item> get_all_item_by_filter(ItemFilter f) {
+
+
+        String sql = "select * from item where name like'%" + f.getName() + "%' and mrp between " + f.getMin_p() + " and " + f.getMax_p() + " and rating > " + f.getRating();
+        if (f.getBrand_id() != 0)
+            sql += " and brand_id=" + f.getBrand_id();
+        sql += " and discount >=" + f.getDiscount();
+        sql += " and qt_avail >=" + f.getQnt();
+        sql += " and description like '%" + f.getName() + "%'";
+        System.out.println(sql);
+        return jdbcTemplate.query(sql, new ItemRowMapper());
+    }
+
+    public List<Employee> get_all_emp_by_filter(EmpFilter f) {
+        String sql = "select * from employee where employee_id in(select a.employee_id  from (select * from employee  natural join personal_info where person_id >0";
+        sql += " and salary >=" + f.getE().getSalary();
+        sql += " and email like '" + f.getP().getEmail() + "%'";
+        if (f.getP().getPhoneno() != "")
+            sql += " and phoneno like '" + f.getP().getPhoneno() + "%'";
+        if (f.getP().getFirstname() != "")
+            sql += " and firstname like '" + f.getP().getFirstname() + "%'";
+        if (f.getP().getLastname() != "")
+            sql += " and lastname like '" + f.getP().getLastname() + "%'";
+        if (f.getP().getZipcode() != "")
+            sql += "and zipcode ='" + f.getP().getZipcode() + "'";
+        if (f.getAge() != 0)
+            sql += "and datediff(curDate(),dob)/365 >=" + f.getAge();
+
+        sql += ")as a)";
+
+        System.out.println(sql);
+        return jdbcTemplate.query(sql, new EmployeeRowMapper());
+    }
+
+    public List<Reciept> get_reciept_by_customer(int id) {
+        String sql = "select * from reciept where customer_id=" + id;
+        return jdbcTemplate.query(sql, new RcRowMapper());
+    }
+
+    public Reciept get_rc_by_id(int id) {
+        String sql = "select * from reciept where receipt_id=" + id;
+        return jdbcTemplate.queryForObject(sql, new RcRowMapper());
     }
 }
 

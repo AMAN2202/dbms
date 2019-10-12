@@ -25,7 +25,7 @@
             src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
 </head>
 <body>
-<h1 class="text-center">Employee</h1>
+<h1 class="text-center">Reciept</h1>
 
 <div class="row">
     <div class="col-3 text-center ml-auto">
@@ -66,25 +66,25 @@
             <th>Action</th>
             </thead>
             <c:forEach var="b" items="${items}">
-                <tr>
-                    <td>${b.employee_id}</td>
-                    <td>${b.p.firstname}</td>
-                    <td>${b.p.lastname}</td>
-                    <td>${b.username}</td>
+                <tr class="product">
+                    <td>${b.receipt_id}</td>
+                    <td>${b.date}</td>
+                    <td>${b.amount}</td>
+                    <td>${b.amount_payed}</td>
                         <%--            <td>${b.p.address}</td>--%>
                         <%--            <td>${b.p.adharno}</td>--%>
                         <%--            <td>${b.p.dob}</td>--%>
-                    <td>${b.p.email}</td>
-                    <td>${b.p.phoneno}</td>
-                        <%--            <td>${b.p.zipcode}</td>--%>
-                        <%--            <td>${b.balance}</td>--%>
-                    <td>${b.salary}</td>
-                    <td>
-                        <a class="btn btn-sm btn-primary  text-dark" href="/employee/update/${b.employee_id}">Update</a>
-                        <a class="btn btn-sm btn-secondary  text-dark" href="/employee/${b.employee_id}">View </a>
-                        <a class="btn btn-sm btn-danger  text-dark" href="/employee/remove/${b.employee_id}">Delete</a>
+                    <td>${b.discount}</td>
+                        <%--                    <td>${b.p.phoneno}</td>--%>
+                        <%--                        &lt;%&ndash;            <td>${b.p.zipcode}</td>&ndash;%&gt;--%>
+                        <%--                        &lt;%&ndash;            <td>${b.balance}</td>&ndash;%&gt;--%>
+                        <%--                    <td>${b.salary}</td>--%>
+                        <%--                    <td>--%>
+                        <%--                        <a class="btn btn-sm btn-primary  text-dark" href="/employee/update/${b.employee_id}">Update</a>--%>
+                        <%--                        <a class="btn btn-sm btn-secondary  text-dark" href="/employee/${b.employee_id}">View </a>--%>
+                        <%--                        <a class="btn btn-sm btn-danger  text-dark" href="/employee/remove/${b.employee_id}">Delete</a>--%>
 
-                    </td>
+                        <%--                    </td>--%>
                 </tr>
 
 
@@ -97,7 +97,54 @@
     </div>
 </div>
 
+<div class="container fixed-bottom mb-5">
+    <h4>
+        <div class="row">
+            <div class="text-info col-6">
+                <div class="float-right"><br>Page No:</div>
+            </div>
 
-</body>
+            <ul id="pagin" class="pagination col-6 ">
+            </ul>
+        </div>
+    </h4>
+</div>
 
-</html>
+
+</div>
+
+<script type="text/javascript">
+    //Pagination
+    pageSize = 8;
+
+    var pageCount = ${items.size()/8};
+
+    for (var i = 0; i < pageCount; i++) {
+        $("#pagin").append('<li class="page-item btn btn-sm"><a class="page-link" href="#">' + (i + 1) + '</a></li> ');
+    }
+
+    showPage = function (page) {
+        $(".product").hide();
+        $(".product").each(function (n) {
+            if (n >= pageSize * (page - 1) && n < pageSize * page)
+                $(this).show();
+
+        });
+    };
+
+    showPage(1);
+
+    $("#pagin li a").click(function () {
+        $("#pagin li a").removeClass("current");
+        $(this).addClass("current");
+        showPage(parseInt($(this).text()))
+    });
+
+
+</script>
+
+</script>
+<
+/body>
+
+< /html>;;

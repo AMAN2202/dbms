@@ -35,6 +35,7 @@ import java.util.Map;
 @Controller
 public class WebController {
 
+
     public User get_user() {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -108,13 +109,12 @@ public class WebController {
     @RequestMapping("item")
     public ModelAndView list_item() {
         ItemFilter f = new ItemFilter();
-        f.setMin_p(0);
-        f.setMax_p(1000000);
         List<Item> items = userRepository.get_all_item();
         ModelAndView model = new ModelAndView("/item/list.jsp");
         model.addObject("filter", f);
         model.addObject("items", items);
         model.addObject("user", get_user());
+        model.addObject("brands", userRepository.get_all_brand());
         return model;
     }
 
@@ -131,10 +131,12 @@ public class WebController {
         m.addObject("bl", bl);
         m.addObject("action", "add");
         m.addObject("user", get_user());
+
         return m;
 
-
     }
+
+
 
     @RequestMapping("item/remove/{id}")
     public String remove_item(@PathVariable int id, final RedirectAttributes redirectAttributes) {
@@ -154,6 +156,47 @@ public class WebController {
         userRepository.addItem(item);
         return "redirect:/brand";
     }
+
+    @RequestMapping(value = "/filteritem", method = RequestMethod.GET)
+    public ModelAndView submit_item_filter(@Valid @ModelAttribute("filter") ItemFilter f,
+                                           BindingResult result, ModelMap model2) {
+
+//        if (result.hasErrors()) {
+//            new ModelAndView("error.jsp");
+//
+//        }
+
+        List<Item> items = userRepository.get_all_item_by_filter(f);
+        ModelAndView model = new ModelAndView("/item/list.jsp");
+        model.addObject("filter", f);
+        model.addObject("items", items);
+        model.addObject("user", get_user());
+        model.addObject("brands", userRepository.get_all_brand());
+        return model;
+    }
+
+
+    @RequestMapping(value = "/filteremp", method = RequestMethod.GET)
+    public ModelAndView submit_emp_filter(@Valid @ModelAttribute("filter") EmpFilter f,
+                                          BindingResult result, ModelMap model2) {
+
+//        if (result.hasErrors()) {
+//            new ModelAndView("error.jsp");
+//
+//        }
+
+        List<Employee> e = userRepository.get_all_emp_by_filter(f);
+        for (Employee x : e) {
+            x.setP(userRepository.get_perosnal_info_by_id(x.getPerson_id()));
+        }
+//        System.out.println(f.getE().getSalary());
+        ModelAndView model = new ModelAndView("/employee/list.jsp");
+        model.addObject("filter", f);
+        model.addObject("items", e);
+        model.addObject("user", get_user());
+        return model;
+    }
+
 
     @RequestMapping(value = "item/{id}")
     public ModelAndView get_item(@PathVariable int id) {
@@ -430,6 +473,7 @@ public class WebController {
         ModelAndView model = new ModelAndView("/employee/list.jsp");
         model.addObject("items", e);
         model.addObject("user", get_user());
+        model.addObject("filter", new EmpFilter());
         return model;
     }
 
@@ -748,4 +792,25 @@ public class WebController {
     }
 
 
+    @RequestMapping("reciept")
+    public ModelAndView get_reciept() {
+        ModelAndView m = new ModelAndView("/rc/list.jsp");
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails) principal).getUsername();
+        Customer c = userRepository.get_customer_by_username(username);
+        m.addObject("items", userRepository.get_reciept_by_customer(c.getCustomer_id()));
+        return m;
+
+    }
+
+    @RequestMapping("reciept/{id}")
+    public ModelAndView get_reciept_detail(@PathVariable int id) {
+        ModelAndView m = new ModelAndView("/rc/detail.jsp");
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails) principal).getUsername();
+        Customer c = userRepository.get_customer_by_username(username);
+        m.addObject("items", userRepository.get_rc_by_id(id));
+        return m;
+
+    }
 }
